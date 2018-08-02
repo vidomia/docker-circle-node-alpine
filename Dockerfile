@@ -29,6 +29,7 @@ RUN addgroup -g 1000 node \
         gnupg \
         libgcc \
         linux-headers \
+	python-dev \
         make  \
     && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
     && tar -xf "node-v$NODE_VERSION.tar.xz" \
@@ -40,10 +41,14 @@ RUN addgroup -g 1000 node \
     && rm -Rf "node-v$NODE_VERSION"
 
 ### DEPLOYMENT & BUILD TOOLS
-RUN apk add --no-cache python-dev \
+ RUN cd /root \
     && pip install python-keystoneclient \
     && pip install python-swiftclient \
     && touch ~/.profile \
     && npm install --global yarn  \
     && apk del .build-deps  \
-    && apk del python-dev 
+    && curl  https://releases.rancher.com/cli/v0.6.7/rancher-linux-amd64-v0.6.7.tar.gz |tar xzvf - \ 
+    && ln -s /root/rancher-v0.6.7/rancher /usr/bin/rancher \
+    && chmod +x /usr/bin/rancher
+COPY autoupdate.sh /autoupdate.sh
+EXPOSE 3000

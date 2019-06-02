@@ -1,7 +1,7 @@
 FROM jfloff/alpine-python:2.7-slim
 MAINTAINER Julien BIJOUX <julien@vidomia.biz>
 ENV NPM_CONFIG_LOGLEVEL info
-ENV NODE_VERSION 8.11.3
+ENV NODE_VERSION 10.11.0
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
 # --virtual: bundle packages, remove whole bundle at once, when done
 ### CIRCLECI DEPS
@@ -50,5 +50,7 @@ RUN addgroup -g 1000 node \
     && curl  https://releases.rancher.com/cli/v0.6.7/rancher-linux-amd64-v0.6.7.tar.gz |tar xzvf - \ 
     && ln -s /root/rancher-v0.6.7/rancher /usr/bin/rancher \
     && chmod +x /usr/bin/rancher
+ 
+ RUN touch /requirements.installed
 COPY autoupdate.sh /autoupdate.sh
 EXPOSE 3000
